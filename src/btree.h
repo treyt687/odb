@@ -2,6 +2,9 @@
 #define BTREE_H
 
 #include <iostream>
+#include <vector>
+
+using namespace std;
 
 typedef int DataElement;
 
@@ -18,7 +21,10 @@ public:
   BTree();
   ~BTree();
 
-  void printTree(Node* node);
+  int getHeight(Node* p);
+  void postorder(Node* p);
+  void printRow(const Node *p, const int height, int depth);
+  void getLine(const Node *root, int depth, vector<int>& vals);
   void insert(DataElement key);
   Node *search(DataElement key);
   void destroy_tree();

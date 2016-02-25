@@ -1,13 +1,15 @@
 #include "btree.h"
 #include <iostream>
+#include <iomanip>
 
 int main()
 {
-    auto b1 = new BTree();
-    for (auto i = 0; i < 5; i++)
-        b1->insert(i);
-    auto x = b1->search(3)->right->key_value;
-    std::cout << x << std::endl;
-    b1->printTree(b1->findRoot());
-    b1->destroy_tree();
+  BTree *b1 = new BTree();
+	b1->insert(8);
+	b1->insert(5);
+	b1->insert(2);
+	b1->insert(12);
+	b1->insert(9);
+  b1->postorder(b1->findRoot());
+  b1->destroy_tree();
 }

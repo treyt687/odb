@@ -1,10 +1,6 @@
 #include <iostream>
 #include <string>
-#include <iomanip>
 #include "btree.h"
-#include <algorithm>
-
-using namespace std;
 
 Node::Node()
 {
@@ -21,73 +17,23 @@ BTree::BTree()
 BTree::~BTree()
 {
   destroy_tree();
-
-
 }
 
-int BTree::getHeight(Node* p) {
-  if (p == NULL)
-  {
-     return -1;
-  }
-
-  int left = getHeight(p->left);
-  int right = getHeight(p->right);
-
-  return 1 + std::max(left, right);
-}
-
-void BTree::postorder(Node* p)
+void BTree::postorder(Node* p, int indent)
 {
-    int height = getHeight(p) * 2;
-    for (int i = 0 ; i < height; i ++) {
-       printRow(p, height, i);
-    }
-}
-
-void BTree::printRow(const Node *p, const int height, int depth) {
-  vector<int> vec;
-  getLine(p, depth, vec);
-  cout << setw((height - depth)*2); // scale setw with depth
-  bool toggle = true; // start with left
-    if (vec.size() > 1) {
-      for (int v : vec) {
-        if (v != (1<<31)) {
-          if (toggle)
-            cout << "/" << "   ";
-          else
-            cout << "\\" << "   ";
+    if(p != NULL) {
+        if(p->left) postorder(p->left, indent+4);
+        if(p->right) postorder(p->right, indent+4);
+        if (indent) {
+            std::cout << std::setw(indent) << ' ';
         }
-        toggle = !toggle;
-      }
-      cout << endl;
-      cout << setw((height - depth)*2);
+        std::cout<< p->key_value << "\n ";
     }
-    for (int v : vec) {
-      if (v != (1<<31))
-          cout << v << "   ";
-    }
-    cout << endl;
-}
-void BTree::getLine(const Node *root, int depth, vector<int>& vals) {
-  if (depth <= 0 && root != nullptr) {
-                vals.push_back(root->key_value);
-                return;
-        }
-        if (root->left != nullptr)
-                getLine(root->left, depth-1, vals);
-        else if (depth-1 <= 0)
-                vals.push_back((1<<31));
-        if (root->right != nullptr)
-                getLine(root->right, depth-1, vals);
-        else if (depth-1 <= 0)
-                vals.push_back((1<<31));
 }
 
 void BTree::destroy_tree(Node *leaf)
 {
-  if (leaf!=NULL)
-  {
+  if (leaf!=NULL)  {
     destroy_tree(leaf->left);
     destroy_tree(leaf->right);
     delete leaf;
